@@ -1,5 +1,11 @@
 const SignUp = () => {
-  return <h1>Sign Up</h1>;
+  return (
+    <div>
+      <h1>Sign Up</h1>
+      <input />
+      <input />
+    </div>
+  );
 };
 
 export default SignUp;
