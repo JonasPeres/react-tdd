@@ -1,24 +1,22 @@
-import { Component } from "react";
 import "./button.component.css";
 
-class Button extends Component {
-  render() {
-    return (
-      <button
-        type={this.props.type}
-        onClick={null}
-        id={this.props.id}
-        style={{
-          backgroundColor: this.props.background,
-          color: this.props.color,
-        }}
-        disabled={this.props.disabled}
-      >
-        {this.props.label}
-      </button>
-    );
-  }
-}
+const Button = (props) => {
+  return (
+    <button
+      className={`${props.disabled ? "disabled " : ""}`}
+      type={props.type}
+      onClick={props.onClick}
+      id={props.id}
+      style={{
+        backgroundColor: props.background,
+        color: props.color,
+      }}
+      disabled={props.disabled}
+    >
+      {props.label}
+    </button>
+  );
+};
 
 const randomId = `random-id-button-${(1 + Date.now() + Math.random())
   .toString()

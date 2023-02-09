@@ -12,3 +12,9 @@ button {
 button:hover {
   filter: brightness(80%);
 }
+button.disabled {
+  cursor: not-allowed !important;
+  border-color: gray !important;
+  background: gray !important;
+  opacity: 0.3;
+}
