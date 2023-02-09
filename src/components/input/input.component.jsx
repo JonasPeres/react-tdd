@@ -1,20 +1,41 @@
-import { Component } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./input.component.css";
 
-class Input extends Component {
-  render() {
-    return (
-      <div className="wrapper-input">
-        <label htmlFor={this.props.id}>{this.props.label}</label>
-        <input
-          name={this.props.name}
-          id={this.props.id}
-          type={this.props.type}
-        />
-      </div>
-    );
-  }
-}
+const Input = (props) => {
+  const [state, setState] = useState("");
+
+  useEffect(() => {
+    if (state !== props.value) {
+      setState(props.value);
+    }
+  }, [state, props.value]);
+
+  const handleChange = useCallback(
+    (event) => {
+      const newValue = event?.target?.value || (event?.length ? event : "");
+
+      setState(newValue);
+
+      if (props.onChange && typeof props.onChange === "function") {
+        props.onChange(newValue);
+      }
+    },
+    [props]
+  );
+
+  return (
+    <div className="wrapper-input">
+      <label htmlFor={props.id}>{props.label}</label>
+      <input
+        name={props.name}
+        id={props.id}
+        type={props.type}
+        value={state}
+        onChange={handleChange}
+      />
+    </div>
+  );
+};
 
 const randomId = `random-id-input-${(1 + Date.now() + Math.random())
   .toString()
