@@ -32,6 +32,7 @@ const Input = (props) => {
         type={props.type}
         value={state}
         onChange={handleChange}
+        autoComplete={props.autocomplete}
       />
     </div>
   );

@@ -1,19 +1,40 @@
 import { useCallback, useState } from "react";
 import Input from "../../components/input/input.component";
 import Button from "../../components/button/button.component";
+import axios from "axios";
 
 const SignUp = () => {
   const [state, setState] = useState({
-    user: "",
+    username: "",
     email: "",
     password: "",
-    passwordRepeat: "",
+    passwordConfirm: "",
   });
+
+  const postAxios = useCallback((body) => {
+    console.log("opa");
+    axios
+      .post("/api/1.0/users", body)
+      .then(() => {
+        return console.log("success");
+      })
+      .catch(() => {
+        return console.log("error");
+      });
+  }, []);
+
+  const submit = useCallback(() => {
+    postAxios({
+      username: state.username,
+      email: state.email,
+      password: state.password,
+    });
+  }, [postAxios, state]);
 
   const disableButton = useCallback(() => {
     return (
-      (!state.password && !state.passwordRepeat) ||
-      state.password !== state.passwordRepeat
+      (!state.password && !state.passwordConfirm) ||
+      state.password !== state.passwordConfirm
     );
   }, [state]);
 
@@ -25,10 +46,11 @@ const SignUp = () => {
           label="User"
           name="user-name-input"
           id="user-name-input"
-          value={state.user}
+          value={state.username}
           onChange={(value) =>
-            setState((prevState) => ({ ...prevState, user: value }))
+            setState((prevState) => ({ ...prevState, username: value }))
           }
+          autocomplete="username"
         />
         <Input
           label="E-mail"
@@ -43,21 +65,29 @@ const SignUp = () => {
           label="Password"
           name="password-input"
           id="password-input"
+          type="password"
           value={state.password}
           onChange={(value) =>
             setState((prevState) => ({ ...prevState, password: value }))
           }
+          autocomplete="new-password"
         />
         <Input
           label="Confirm Password"
           name="confirm-password-input"
           id="confirm-password-input"
-          value={state.passwordRepeat}
+          type="password"
+          value={state.passwordConfirm}
           onChange={(value) =>
-            setState((prevState) => ({ ...prevState, passwordRepeat: value }))
+            setState((prevState) => ({ ...prevState, passwordConfirm: value }))
           }
+          autocomplete="new-password"
         />
-        <Button label={<span>Sign Up</span>} disabled={disableButton()} />
+        <Button
+          onClick={() => submit()}
+          label={<span>Sign Up</span>}
+          disabled={disableButton()}
+        />
       </form>
     </div>
   );

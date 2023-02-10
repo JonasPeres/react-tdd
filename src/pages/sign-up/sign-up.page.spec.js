@@ -42,9 +42,9 @@ describe("Sign Up Page", () => {
     it("Enable Button when passwords have same value", () => {
       render(<SignUp />);
       const passwordInput = screen.getByLabelText("Password");
-      const passwordRepeatInput = screen.getByLabelText("Confirm Password");
+      const passwordConfirmInput = screen.getByLabelText("Confirm Password");
       userEvent.type(passwordInput, "gonnaPass");
-      userEvent.type(passwordRepeatInput, "gonnaPass");
+      userEvent.type(passwordConfirmInput, "gonnaPass");
       const button = screen.getByRole("button", { type: "submit" });
       expect(button).toBeEnabled();
     });
