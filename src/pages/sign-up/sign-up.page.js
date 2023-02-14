@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
 import Input from "../../components/input/input.component";
 import Button from "../../components/button/button.component";
-import axios from "axios";
+import { signUp } from "../../services/api-call.service";
 
-const SignUp = () => {
+const SignUpPage = () => {
   const [state, setState] = useState({
     username: "",
     email: "",
@@ -11,25 +11,18 @@ const SignUp = () => {
     passwordConfirm: "",
   });
 
-  const postAxios = useCallback((body) => {
-    console.log("opa");
-    axios
-      .post("/api/1.0/users", body)
-      .then(() => {
-        return console.log("success");
-      })
-      .catch(() => {
-        return console.log("error");
+  const submit = useCallback(async () => {
+    try {
+      const response = await signUp({
+        username: state.username,
+        email: state.email,
+        password: state.password,
       });
-  }, []);
-
-  const submit = useCallback(() => {
-    postAxios({
-      username: state.username,
-      email: state.email,
-      password: state.password,
-    });
-  }, [postAxios, state]);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [state]);
 
   const disableButton = useCallback(() => {
     return (
@@ -93,4 +86,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignUpPage;
