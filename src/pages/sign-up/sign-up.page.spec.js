@@ -1,6 +1,7 @@
 import SignUp from "./sign-up.page";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import axios from "axios";
 
 describe("Sign Up Page", () => {
   describe("Layout", () => {
@@ -32,9 +33,10 @@ describe("Sign Up Page", () => {
       const input = screen.getByLabelText("Confirm Password");
       expect(input).toBeInTheDocument();
     });
-    it("Has Confirm Button", () => {
+    it("Has Confirm Button and is disabled", () => {
       render(<SignUp />);
       const button = screen.getByRole("button", { type: "submit" });
+      expect(button).toBeInTheDocument();
       expect(button).toBeDisabled();
     });
   });
@@ -47,6 +49,31 @@ describe("Sign Up Page", () => {
       userEvent.type(passwordConfirmInput, "gonnaPass");
       const button = screen.getByRole("button", { type: "submit" });
       expect(button).toBeEnabled();
+    });
+    it("Send username, email and password after click the button", () => {
+      render(<SignUp />);
+      const username = screen.getByLabelText("User");
+      const email = screen.getByLabelText("E-mail");
+      const passwordInput = screen.getByLabelText("Password");
+      const passwordConfirmInput = screen.getByLabelText("Confirm Password");
+      userEvent.type(username, "jonasperes");
+      userEvent.type(email, "jonasperes10@hotmail.com");
+      userEvent.type(passwordInput, "gonnaPass");
+      userEvent.type(passwordConfirmInput, "gonnaPass");
+      const button = screen.getByRole("button", { type: "submit" });
+
+      axios.post = jest.fn();
+
+      userEvent.click(button);
+
+      const callPost = axios.post.mock.calls[0];
+      const body = callPost[1];
+
+      expect(body).toEqual({
+        username: "jonasperes",
+        email: "jonasperes10@hotmail.com",
+        password: "gonnaPass",
+      });
     });
   });
 });
