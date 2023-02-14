@@ -11,18 +11,22 @@ const SignUpPage = () => {
     passwordConfirm: "",
   });
 
-  const submit = useCallback(async () => {
-    try {
-      const response = await signUp({
-        username: state.username,
-        email: state.email,
-        password: state.password,
-      });
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [state]);
+  const submit = useCallback(
+    async (event) => {
+      event.preventDefault();
+      try {
+        const response = await signUp({
+          username: state.username,
+          email: state.email,
+          password: state.password,
+        });
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [state]
+  );
 
   const disableButton = useCallback(() => {
     return (
@@ -33,7 +37,7 @@ const SignUpPage = () => {
 
   return (
     <div>
-      <form onSubmit={null}>
+      <form onSubmit={submit}>
         <h1>Sign Up</h1>
         <Input
           label="User"
@@ -76,11 +80,7 @@ const SignUpPage = () => {
           }
           autocomplete="new-password"
         />
-        <Button
-          onClick={() => submit()}
-          label={<span>Sign Up</span>}
-          disabled={disableButton()}
-        />
+        <Button label={<span>Sign Up</span>} disabled={disableButton()} />
       </form>
     </div>
   );
