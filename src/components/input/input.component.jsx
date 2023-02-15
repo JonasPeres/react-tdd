@@ -2,6 +2,10 @@ import { useCallback, useEffect, useState } from "react";
 import "./input.component.css";
 
 const Input = (props) => {
+  const randomId = `random-id-input-${(1 + Date.now() + Math.random())
+    .toString()
+    .replace(".", "")}`;
+
   const [state, setState] = useState("");
 
   useEffect(() => {
@@ -25,26 +29,17 @@ const Input = (props) => {
 
   return (
     <div className="wrapper-input">
-      <label htmlFor={props.id}>{props.label}</label>
+      <label htmlFor={props.id || randomId}>{props.label}</label>
       <input
+        id={props.id || randomId}
         name={props.name}
-        id={props.id}
-        type={props.type}
         value={state}
         onChange={handleChange}
+        type={props.type || "text"}
         autoComplete={props.autocomplete}
       />
     </div>
   );
-};
-
-const randomId = `random-id-input-${(1 + Date.now() + Math.random())
-  .toString()
-  .replace(".", "")}`;
-
-Input.defaultProps = {
-  id: randomId,
-  type: "text",
 };
 
 export default Input;

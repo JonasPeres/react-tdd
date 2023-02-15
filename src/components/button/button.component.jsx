@@ -2,10 +2,15 @@ import { useCallback } from "react";
 import "./button.component.css";
 
 const Button = (props) => {
+  const randomId = `random-id-button-${(1 + Date.now() + Math.random())
+    .toString()
+    .replace(".", "")}`;
+
   const handleClick = useCallback(
     (event) => {
       if (
         !props.disabled &&
+        !props.loading &&
         props.onClick &&
         typeof props.onClick === "function"
       ) {
@@ -17,31 +22,19 @@ const Button = (props) => {
 
   return (
     <button
-      className={`${props.disabled ? "disabled " : ""}`}
-      type={props.type}
+      className={`${props.disabled || props.loading ? "disabled " : ""}`}
+      id={props.id || randomId}
       onClick={(event) => handleClick(event)}
-      id={props.id}
+      type={props.type || "submit"}
+      disabled={props.disabled || props.loading}
       style={{
-        backgroundColor: props.background,
-        color: props.color,
+        backgroundColor: props.background || "#299C39",
+        color: props.color || "#F6F6F8",
       }}
-      disabled={props.disabled}
     >
-      {props.label}
+      {props.label || "Confirm"}
     </button>
   );
-};
-
-const randomId = `random-id-button-${(1 + Date.now() + Math.random())
-  .toString()
-  .replace(".", "")}`;
-
-Button.defaultProps = {
-  id: randomId,
-  background: "#299C39",
-  color: "#F6F6F8",
-  label: "Confirm",
-  type: "submit",
 };
 
 export default Button;
