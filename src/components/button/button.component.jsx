@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { Loader } from "semantic-ui-react";
 import "./button.component.css";
 
 const Button = (props) => {
@@ -22,7 +23,10 @@ const Button = (props) => {
 
   return (
     <button
-      className={`${props.disabled || props.loading ? "disabled " : ""}`}
+      className={
+        `${props.disabled ? "disabled " : ""}` +
+        `${props.loading ? "loading " : ""}`
+      }
       id={props.id || randomId}
       onClick={(event) => handleClick(event)}
       type={props.type || "submit"}
@@ -33,6 +37,11 @@ const Button = (props) => {
       }}
     >
       {props.label || "Confirm"}
+      {props.loading ? (
+        <div className="loader">
+          <Loader active size="mini" inverted />
+        </div>
+      ) : null}
     </button>
   );
 };
