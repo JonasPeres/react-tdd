@@ -4,71 +4,81 @@ import userEvent from "@testing-library/user-event";
 import axios from "axios";
 
 describe("Sign Up Page", () => {
+  let header;
+  let usernameInput;
+  let emailInput;
+  let passwordInput;
+  let passwordConfirmInput;
+  let button;
+
+  const setupPage = () => {
+    render(<SignUp />);
+
+    header = screen.getByRole("heading", {
+      level: 1,
+      name: "Sign Up",
+    });
+    usernameInput = screen.getByLabelText("User");
+    emailInput = screen.getByLabelText("E-mail");
+    passwordInput = screen.getByLabelText("Password");
+    passwordConfirmInput = screen.getByLabelText("Confirm Password");
+    button = screen.getByRole("button", { type: "submit" });
+  };
+
+  const fillInputs = () => {
+    userEvent.type(usernameInput, "jonasperes");
+    userEvent.type(emailInput, "jonasperes10@hotmail.com");
+    userEvent.type(passwordInput, "gonnaPass");
+    userEvent.type(passwordConfirmInput, "gonnaPass");
+  };
+
   describe("Layout", () => {
     it("Has Header", () => {
-      render(<SignUp />);
-      const header = screen.getByRole("heading", {
-        level: 1,
-        name: "Sign Up",
-      });
+      setupPage();
       expect(header).toBeInTheDocument();
     });
     it("Has UserName Input", () => {
-      render(<SignUp />);
-      const input = screen.getByLabelText("User");
-      expect(input).toBeInTheDocument();
+      setupPage();
+      expect(usernameInput).toBeInTheDocument();
     });
     it("Has E-mail Input", () => {
-      render(<SignUp />);
-      const input = screen.getByLabelText("E-mail");
-      expect(input).toBeInTheDocument();
+      setupPage();
+      expect(emailInput).toBeInTheDocument();
     });
     it("Has Password Input", () => {
-      render(<SignUp />);
-      const input = screen.getByLabelText("Password");
-      expect(input).toBeInTheDocument();
+      setupPage();
+      expect(passwordInput).toBeInTheDocument();
     });
     it("Has Password Confirm Input", () => {
-      render(<SignUp />);
-      const input = screen.getByLabelText("Confirm Password");
-      expect(input).toBeInTheDocument();
+      setupPage();
+      expect(passwordConfirmInput).toBeInTheDocument();
     });
     it("Has Confirm Button and is disabled", () => {
-      render(<SignUp />);
-      const button = screen.getByRole("button", { type: "submit" });
+      setupPage();
       expect(button).toBeInTheDocument();
       expect(button).toBeDisabled();
     });
   });
+
   describe("Interactions", () => {
     it("Enable Button when passwords have same value", () => {
-      render(<SignUp />);
-      const passwordInput = screen.getByLabelText("Password");
-      const passwordConfirmInput = screen.getByLabelText("Confirm Password");
-      userEvent.type(passwordInput, "gonnaPass");
-      userEvent.type(passwordConfirmInput, "gonnaPass");
-      const button = screen.getByRole("button", { type: "submit" });
+      setupPage();
+      fillInputs();
       expect(button).toBeEnabled();
     });
-    it("Send username, email and password after click the button", () => {
-      render(<SignUp />);
-      const username = screen.getByLabelText("User");
-      const email = screen.getByLabelText("E-mail");
-      const passwordInput = screen.getByLabelText("Password");
-      const passwordConfirmInput = screen.getByLabelText("Confirm Password");
-      userEvent.type(username, "jonasperes");
-      userEvent.type(email, "jonasperes10@hotmail.com");
-      userEvent.type(passwordInput, "gonnaPass");
-      userEvent.type(passwordConfirmInput, "gonnaPass");
-      const button = screen.getByRole("button", { type: "submit" });
-
-      axios.post = jest.fn();
-
+    it("Show Loading after click the button", () => {
+      setupPage();
+      fillInputs();
       userEvent.click(button);
-
+      expect(button).toHaveClass("loading");
+    });
+    it("Send username, email and password after click the button", () => {
+      setupPage();
+      fillInputs();
+      axios.post = jest.fn();
+      userEvent.click(button);
       const callPost = axios.post.mock.calls[0];
       const body = callPost[1];
-
       expect(body).toEqual({
         username: "jonasperes",
         email: "jonasperes10@hotmail.com",
