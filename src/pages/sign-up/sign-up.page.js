@@ -4,6 +4,7 @@ import Button from "../../components/button/button.component";
 import { signUp } from "../../services/api-call.service";
 
 const SignUpPage = () => {
+  const [loadingButton, setLoadingButton] = useState(false);
   const [state, setState] = useState({
     username: "",
     email: "",
@@ -14,6 +15,7 @@ const SignUpPage = () => {
   const submit = useCallback(
     async (event) => {
       event.preventDefault();
+      setLoadingButton(true);
       try {
         const response = await signUp({
           username: state.username,
@@ -23,6 +25,8 @@ const SignUpPage = () => {
         console.log(response);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoadingButton(false);
       }
     },
     [state]
@@ -80,7 +84,11 @@ const SignUpPage = () => {
           }
           autocomplete="new-password"
         />
-        <Button label={<span>Sign Up</span>} disabled={disableButton()} />
+        <Button
+          label={<span>Sign Up</span>}
+          disabled={disableButton()}
+          loading={loadingButton}
+        />
       </form>
     </div>
   );
