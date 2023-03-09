@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import Input from "../../components/input/input.component";
 import Button from "../../components/button/button.component";
 import { signUp } from "../../services/api-call.service";
+import { toast } from "react-toastify";
 
 const SignUpPage = () => {
   const [loadingButton, setLoadingButton] = useState(false);
@@ -15,19 +16,33 @@ const SignUpPage = () => {
   const submit = useCallback(
     async (event) => {
       event.preventDefault();
+
       setLoadingButton(true);
-      try {
-        const response = await signUp({
-          username: state.username,
-          email: state.email,
-          password: state.password,
+
+      signUp({
+        username: state.username,
+        email: state.email,
+        password: state.password,
+      })
+        .then((response) => {
+          if (response?.status <= 400) {
+            toast.success(response?.data?.message, {});
+          } else {
+            throw response;
+          }
+        })
+        .catch((err) => {
+          let message = "";
+          const errors = err?.response?.data?.validationErrors;
+          Object.values(errors).forEach(
+            (error, index) =>
+              (message = message.concat(index !== 0 ? ", " : "", error))
+          );
+          toast.error(message || "Unexpected Error", {});
+        })
+        .finally(() => {
+          setLoadingButton(false);
         });
-        console.log(response);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoadingButton(false);
-      }
     },
     [state]
   );
