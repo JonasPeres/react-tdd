@@ -8,6 +8,11 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <App />
-    <ToastContainer position="top-center" theme="colored" draggable={false} />
+    <ToastContainer
+      position="top-center"
+      theme="colored"
+      pauseOnFocusLoss={false}
+      draggable={false}
+    />
   </React.StrictMode>
 );
