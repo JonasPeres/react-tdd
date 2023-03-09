@@ -1,7 +1,8 @@
 import SignUp from "./sign-up.page";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import axios from "axios";
+import { setupServer } from "msw/node";
+import { rest } from "msw";
 
 describe("Sign Up Page", () => {
   let header;
@@ -31,6 +32,21 @@ describe("Sign Up Page", () => {
     userEvent.type(passwordInput, "gonnaPass");
     userEvent.type(passwordConfirmInput, "gonnaPass");
   };
+
+  let body;
+
+  const server = setupServer(
+    rest.post("/api/1.0/users", (req, res, ctx) => {
+      body = req.body;
+      return res(ctx.status(200));
+    })
+  );
+
+  beforeEach(() => server.resetHandlers());
+
+  beforeAll(() => server.listen());
+
+  afterAll(() => server.close());
 
   describe("Layout", () => {
     it("Has Header", () => {
@@ -75,10 +91,7 @@ describe("Sign Up Page", () => {
     it("Send username, email and password after click the button", () => {
       setupPage();
       fillInputs();
-      axios.post = jest.fn();
       userEvent.click(button);
-      const callPost = axios.post.mock.calls[0];
-      const body = callPost[1];
       expect(body).toEqual({
         username: "jonasperes",
         email: "jonasperes10@hotmail.com",

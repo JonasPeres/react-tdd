@@ -33,7 +33,7 @@ const SignUpPage = () => {
         })
         .catch((err) => {
           let message = "";
-          const errors = err?.response?.data?.validationErrors;
+          const errors = err?.response?.data?.validationErrors || {};
           Object.values(errors).forEach(
             (error, index) =>
               (message = message.concat(index !== 0 ? ", " : "", error))
