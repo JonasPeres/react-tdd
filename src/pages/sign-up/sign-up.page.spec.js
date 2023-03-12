@@ -112,5 +112,12 @@ describe("Sign Up Page", () => {
       userEvent.click(button);
       expect(body).toEqual(expectedBody);
     });
+    it("Show success message after api response successfully", async () => {
+      // doesn't work
+      fillInputs();
+      expect(screen.queryByText(successMessage)).not.toBeInTheDocument();
+      userEvent.click(button);
+      expect(await screen.findByText(successMessage)).toBeInTheDocument();
+    });
   });
 });
