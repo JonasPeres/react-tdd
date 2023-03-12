@@ -1,9 +1,9 @@
 /* eslint-disable testing-library/no-unnecessary-act */
-import SignUp from "./sign-up.page";
-import { act, render, screen } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
+import SignUp from "./sign-up.page";
 import { ToastContainer } from "react-toastify";
 
 describe("Sign Up Page", () => {
@@ -33,48 +33,9 @@ describe("Sign Up Page", () => {
     button = screen.getByRole("button", { type: "submit" });
   };
 
-  const fillInputs = () => {
-    act(() => {
-      userEvent.type(usernameInput, "jonasperes");
-      userEvent.type(emailInput, "jonasperes10@hotmail.com");
-      userEvent.type(passwordInput, "gonnaPass");
-      userEvent.type(passwordConfirmInput, "gonnaPass");
-    });
-  };
-
-  const buttonClick = () => {
-    act(() => {
-      userEvent.click(button);
-    });
-  };
-
-  let body;
-  let countClick = 0;
-
-  const server = setupServer(
-    rest.post("/api/1.0/users", (req, res, ctx) => {
-      countClick += 1;
-      body = req.body;
-      return res(ctx.status(200));
-    })
-  );
-
-  const expectedBody = {
-    username: "jonasperes",
-    email: "jonasperes10@hotmail.com",
-    password: "gonnaPass",
-  };
-
-  const successMessage = "User created";
-
   beforeEach(() => {
-    server.resetHandlers();
     setupSignUpPage();
   });
-
-  beforeAll(() => server.listen());
-
-  afterAll(() => server.close());
 
   describe("Layout", () => {
     it("Has Header", () => {
@@ -99,34 +60,76 @@ describe("Sign Up Page", () => {
   });
 
   describe("Interactions", () => {
-    it("Enable Button when passwords have same value", () => {
+    let body;
+    let counterClick = 0;
+
+    const server = setupServer(
+      rest.post("/api/1.0/users", (req, res, ctx) => {
+        counterClick += 1;
+        body = req.body;
+        return res(ctx.status(200), ctx.text({ message: "User created" }));
+      })
+    );
+
+    const fillInputs = () => {
+      act(() => {
+        userEvent.type(usernameInput, "jonasperes");
+        userEvent.type(emailInput, "jonasperes10@hotmail.com");
+        userEvent.type(passwordInput, "gonnaPass");
+        userEvent.type(passwordConfirmInput, "gonnaPass");
+      });
+    };
+
+    const buttonClick = () => {
+      act(() => {
+        userEvent.click(button);
+      });
+    };
+
+    const expectedBody = {
+      username: "jonasperes",
+      email: "jonasperes10@hotmail.com",
+      password: "gonnaPass",
+    };
+
+    const successMessage = "User created";
+
+    beforeAll(() => server.listen());
+
+    afterAll(() => server.close());
+
+    beforeEach(() => {
+      counterClick = 0;
+      server.resetHandlers();
       fillInputs();
+    });
+
+    it("Enable Button when passwords have same value", () => {
       expect(button).toBeEnabled();
     });
     it("Show Loading after click the button", () => {
-      fillInputs();
       buttonClick();
       expect(button).toHaveClass("loading");
     });
-    it("Disable Button when wait api response", () => {
-      fillInputs();
+    it("Disable Button when wait api response", async () => {
+      buttonClick();
+      expect(button).toHaveClass("loading");
       buttonClick();
       buttonClick();
       buttonClick();
-      buttonClick();
-      expect(countClick).toBe(1);
+      await waitFor(() => {
+        expect(button).not.toHaveClass("loading");
+      });
+      expect(counterClick).toBe(1);
     });
     it("Send username, email and password after click the button", () => {
-      fillInputs();
       buttonClick();
       expect(body).toEqual(expectedBody);
     });
     it("Show success message after api response successfully", async () => {
-      // doesn't work
-      // fillInputs();
-      // expect(screen.queryByText(successMessage)).not.toBeInTheDocument();
-      // buttonClick();
-      // expect(await screen.findByText(successMessage)).toBeInTheDocument();
+      expect(screen.queryByText(successMessage)).not.toBeInTheDocument();
+      buttonClick();
+      expect(await screen.findByText(successMessage)).toBeInTheDocument();
     });
   });
 });
