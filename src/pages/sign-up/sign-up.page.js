@@ -25,7 +25,7 @@ const SignUpPage = () => {
         password: state.password,
       })
         .then((response) => {
-          if (response?.status <= 400) {
+          if (response?.status < 400) {
             toast.success(response?.data?.message, {});
           } else {
             throw response;
