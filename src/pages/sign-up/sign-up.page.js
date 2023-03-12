@@ -13,39 +13,33 @@ const SignUpPage = () => {
     passwordConfirm: "",
   });
 
-  const submit = useCallback(
-    async (event) => {
-      event.preventDefault();
-
-      setLoadingButton(true);
-
-      signUp({
-        username: state.username,
-        email: state.email,
-        password: state.password,
+  const submit = useCallback(() => {
+    setLoadingButton(true);
+    signUp({
+      username: state.username,
+      email: state.email,
+      password: state.password,
+    })
+      .then((response) => {
+        if (response?.status < 400) {
+          toast.success(response?.data?.message, {});
+        } else {
+          throw response;
+        }
       })
-        .then((response) => {
-          if (response?.status < 400) {
-            toast.success(response?.data?.message, {});
-          } else {
-            throw response;
-          }
-        })
-        .catch((err) => {
-          let message = "";
-          const errors = err?.response?.data?.validationErrors || {};
-          Object.values(errors).forEach(
-            (error, index) =>
-              (message = message.concat(index !== 0 ? ", " : "", error))
-          );
-          toast.error(message || "Unexpected Error", {});
-        })
-        .finally(() => {
-          setLoadingButton(false);
-        });
-    },
-    [state]
-  );
+      .catch((err) => {
+        let message = "";
+        const errors = err?.response?.data?.validationErrors || {};
+        Object.values(errors).forEach(
+          (error, index) =>
+            (message = message.concat(index !== 0 ? ", " : "", error))
+        );
+        toast.error(message || "Unexpected Error", {});
+      })
+      .finally(() => {
+        setLoadingButton(false);
+      });
+  }, [state]);
 
   const disableButton = useCallback(() => {
     return (
@@ -100,6 +94,7 @@ const SignUpPage = () => {
           autocomplete="new-password"
         />
         <Button
+          onClick={() => submit()}
           label={<span>Sign Up</span>}
           disabled={disableButton()}
           loading={loadingButton}

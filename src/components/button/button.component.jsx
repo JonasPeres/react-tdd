@@ -9,6 +9,8 @@ const Button = (props) => {
 
   const handleClick = useCallback(
     (event) => {
+      event.preventDefault();
+
       if (
         !props.disabled &&
         !props.loading &&
