@@ -1,5 +1,7 @@
 # Repository used to learn TDD in React
 
+In addition to putting the tests into practice, I'm building this project with some practices as if it a final product for the market
+
 Course link: https://www.udemy.com/course/react-with-test-driven-development/
 
 ## Available Scripts
