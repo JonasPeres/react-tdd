@@ -2,7 +2,7 @@ import SignUpPage from './pages/sign-up/sign-up.page'
 
 const App = () => {
   return (
-    <div className="App">
+    <div id="app">
       <SignUpPage />
     </div>
   )

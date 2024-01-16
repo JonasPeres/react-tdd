@@ -3,6 +3,7 @@ import { toast } from 'react-toastify'
 import Button from '../../components/button/button.component'
 import Input from '../../components/input/input.component'
 import { signUp } from '../../services/api-call.service'
+import './sign-up.page.css'
 
 const SignUpPage = () => {
   const [loadingButton, setLoadingButton] = useState(false)
@@ -50,7 +51,7 @@ const SignUpPage = () => {
   }, [state])
 
   return (
-    <div>
+    <div className='sign-up-page'>
       <form onSubmit={submit}>
         <h1>Sign Up</h1>
         <Input
