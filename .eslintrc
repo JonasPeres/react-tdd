@@ -1,0 +1,14 @@
+{
+  "root": true,
+  "extends": ["ts-react-important-stuff", "plugin:prettier/recommended"],
+  "parser": "@babel/eslint-parser",
+  "overrides": [
+    {
+      "files": ["*.js", "*.jsx"],
+      "rules": {
+        "semi": [2, "never"],
+        "quotes": [2, "single"]
+      }
+    }
+  ]
+}

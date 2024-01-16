@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
-import Input from "../../components/input/input.component";
-import Button from "../../components/button/button.component";
-import { signUp } from "../../services/api-call.service";
 import { toast } from "react-toastify";
+import Button from "../../components/button/button.component";
+import Input from "../../components/input/input.component";
+import { signUp } from "../../services/api-call.service";
 
 const SignUpPage = () => {
   const [loadingButton, setLoadingButton] = useState(false);
@@ -29,12 +29,20 @@ const SignUpPage = () => {
       })
       .catch((err) => {
         let message = "";
+
         const errors = err?.response?.data?.validationErrors || {};
-        Object.values(errors).forEach(
-          (error, index) =>
-            (message = message.concat(index !== 0 ? ", " : "", error))
+        Object.values(errors).forEach((error, index) => {
+          if (index !== 0) {
+            message += "<br/>";
+          }
+          message += "• " + error;
+        });
+
+        toast.error(
+          <div dangerouslySetInnerHTML={{ __html: message }} /> ||
+            "Unexpected Error",
+          {}
         );
-        toast.error(message || "Unexpected Error", {});
       })
       .finally(() => {
         setLoadingButton(false);

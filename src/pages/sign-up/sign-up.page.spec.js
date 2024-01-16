@@ -1,10 +1,10 @@
 /* eslint-disable testing-library/no-unnecessary-act */
 import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { setupServer } from "msw/node";
 import { rest } from "msw";
-import SignUp from "./sign-up.page";
+import { setupServer } from "msw/node";
 import { ToastContainer } from "react-toastify";
+import SignUp from "./sign-up.page";
 
 describe("Sign Up Page", () => {
   let header;
@@ -94,6 +94,10 @@ describe("Sign Up Page", () => {
 
     const successMessage = "User created";
 
+    const showErrorMessage = (message) => {
+      return "• " + message;
+    };
+
     beforeAll(() => server.listen());
 
     afterAll(() => server.close());
@@ -111,7 +115,7 @@ describe("Sign Up Page", () => {
       buttonClick();
       expect(button).toHaveClass("loading");
     });
-    it("Disable Button when wait api response", async () => {
+    it("Disable Button when wait for api response", async () => {
       buttonClick();
       expect(button).toHaveClass("loading");
       buttonClick();
@@ -130,6 +134,24 @@ describe("Sign Up Page", () => {
       expect(screen.queryByText(successMessage)).not.toBeInTheDocument();
       buttonClick();
       expect(await screen.findByText(successMessage)).toBeInTheDocument();
+    });
+    it("Show error message after api response with error", async () => {
+      server.use(
+        rest.post("/api/1.0/users", (req, res, ctx) => {
+          return res(
+            ctx.status(400),
+            ctx.json({
+              validationErrors: { username: "Username cannot be null" },
+            })
+          );
+        })
+      );
+      setupServer();
+      userEvent.click(button);
+      const validationError = await screen.findByText(
+        showErrorMessage("Username cannot be null")
+      );
+      expect(validationError).toBeInTheDocument();
     });
   });
 });
