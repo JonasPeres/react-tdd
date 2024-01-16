@@ -1,6 +1,6 @@
 {
   "root": true,
-  "extends": ["ts-react-important-stuff", "plugin:prettier/recommended"],
+  "extends": ["plugin:prettier/recommended"],
   "parser": "@babel/eslint-parser",
   "overrides": [
     {
