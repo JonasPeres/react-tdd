@@ -1,18 +1,13 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { ToastContainer } from "react-toastify";
-import App from "./App";
-import "./index.css";
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { ToastContainer } from 'react-toastify'
+import App from './App'
+import './index.css'
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
     <App />
-    <ToastContainer
-      position="top-center"
-      theme="colored"
-      pauseOnFocusLoss={false}
-      draggable={false}
-    />
+    <ToastContainer position="top-center" theme="colored" pauseOnFocusLoss={false} draggable={false} />
   </React.StrictMode>
-);
+)

@@ -1,31 +1,29 @@
-import { useCallback, useEffect, useState } from "react";
-import "./input.component.css";
+import { useCallback, useEffect, useState } from 'react'
+import './input.component.css'
 
 const Input = (props) => {
-  const randomId = `random-id-input-${(1 + Date.now() + Math.random())
-    .toString()
-    .replace(".", "")}`;
+  const randomId = `random-id-input-${(1 + Date.now() + Math.random()).toString().replace('.', '')}`
 
-  const [state, setState] = useState("");
+  const [state, setState] = useState('')
 
   useEffect(() => {
     if (state !== props.value) {
-      setState(props.value);
+      setState(props.value)
     }
-  }, [state, props.value]);
+  }, [state, props.value])
 
   const handleChange = useCallback(
     (event) => {
-      const newValue = event?.target?.value || (event?.length ? event : "");
+      const newValue = event?.target?.value || (event?.length ? event : '')
 
-      setState(newValue);
+      setState(newValue)
 
-      if (props.onChange && typeof props.onChange === "function") {
-        props.onChange(newValue);
+      if (props.onChange && typeof props.onChange === 'function') {
+        props.onChange(newValue)
       }
     },
     [props]
-  );
+  )
 
   return (
     <div className="wrapper-input">
@@ -35,11 +33,11 @@ const Input = (props) => {
         name={props.name}
         value={state}
         onChange={handleChange}
-        type={props.type || "text"}
+        type={props.type || 'text'}
         autoComplete={props.autocomplete}
       />
     </div>
-  );
-};
+  )
+}
 
-export default Input;
+export default Input

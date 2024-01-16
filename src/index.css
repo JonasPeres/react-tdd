@@ -1,8 +1,8 @@
-@import "semantic-ui-css/semantic.min.css";
-@import "react-toastify/dist/ReactToastify.css";
+@import 'semantic-ui-css/semantic.min.css';
+@import 'react-toastify/dist/ReactToastify.css';
 
 * {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   box-sizing: border-box;
 }
 *::after {
@@ -10,4 +10,12 @@
 }
 *::before {
   box-sizing: border-box;
+}
+
+#app {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

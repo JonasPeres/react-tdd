@@ -1,7 +1,11 @@
-import SignUpPage from "./pages/sign-up/sign-up.page";
+import SignUpPage from './pages/sign-up/sign-up.page'
 
 const App = () => {
-  return <SignUpPage />;
-};
+  return (
+    <div className="App">
+      <SignUpPage />
+    </div>
+  )
+}
 
-export default App;
+export default App
