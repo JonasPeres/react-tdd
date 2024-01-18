@@ -1,11 +1,13 @@
 import { useCallback, useState } from 'react'
+import { withTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import Button from '../../components/button/button.component'
 import Input from '../../components/input/input.component'
 import { signUp } from '../../services/api-call.service'
 import './sign-up.page.css'
 
-const SignUpPage = () => {
+const SignUpPage = (props) => {
+  const { t } = props
   const [loadingButton, setLoadingButton] = useState(false)
   const [state, setState] = useState({
     username: '',
@@ -47,13 +49,13 @@ const SignUpPage = () => {
   }, [state])
 
   const disableButton = useCallback(() => {
-    return (!state.password && !state.passwordConfirm) || state.password !== state.passwordConfirm
+    return !state.username || !state.email || !state.password || !state.passwordConfirm || state.password !== state.passwordConfirm
   }, [state])
 
   return (
-    <div className='sign-up-page'>
+    <div className="sign-up-page">
       <form onSubmit={submit}>
-        <h1>Sign Up</h1>
+        <h1>{t('signUp')}</h1>
         <Input
           label="User"
           name="user-name-input"
@@ -86,6 +88,7 @@ const SignUpPage = () => {
           value={state.passwordConfirm}
           onChange={(value) => setState((prevState) => ({ ...prevState, passwordConfirm: value }))}
           autocomplete="new-password"
+          error={state.password !== state.passwordConfirm ? 'Passwords do not match' : null}
         />
         <Button onClick={() => submit()} label={<span>Sign Up</span>} disabled={disableButton()} loading={loadingButton} />
       </form>
@@ -93,4 +96,6 @@ const SignUpPage = () => {
   )
 }
 
-export default SignUpPage
+const SignUpPageWithTranslation = withTranslation()(SignUpPage)
+
+export default SignUpPageWithTranslation

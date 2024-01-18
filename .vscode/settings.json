@@ -20,5 +20,11 @@
       "source.organizeImports": true
     }
   },
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "[html][javascript][json]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.organizeImports": "explicit"
+    }
+  }
 }

@@ -12,3 +12,11 @@ input {
   border: 1px solid #707981;
   border-radius: 5px;
 }
+input.error {
+  border-color: #ff0000;
+}
+span.error {
+  font-size: 12px;
+  margin-top: 2px;
+  color: #ff0000;
+}

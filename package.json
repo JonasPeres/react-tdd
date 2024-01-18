@@ -1,6 +1,6 @@
 {
-  "name": "source",
-  "version": "0.1.0",
+  "name": "react-tdd",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "build": "react-scripts build",
@@ -45,16 +45,20 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.1",
     "husky": "^8.0.3",
-    "msw": "^1.1.0",
+    "i18next": "^21.2.4",
     "prettier": "^2.3.2",
     "prettier-eslint": "^13.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-i18next": "^11.12.0",
     "react-scripts": "5.0.1",
     "react-toastify": "^9.1.1",
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.4",
     "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "msw": "^1.0.0"
   },
   "proxy": "http://localhost:8080"
 }

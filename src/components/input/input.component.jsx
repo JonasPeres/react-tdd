@@ -2,15 +2,16 @@ import { useCallback, useEffect, useState } from 'react'
 import './input.component.css'
 
 const Input = (props) => {
+  const { id, name, type, label, value, error, onChange, autocomplete } = props
   const randomId = `random-id-input-${(1 + Date.now() + Math.random()).toString().replace('.', '')}`
 
   const [state, setState] = useState('')
 
   useEffect(() => {
-    if (state !== props.value) {
-      setState(props.value)
+    if (state !== value) {
+      setState(value)
     }
-  }, [state, props.value])
+  }, [state, value])
 
   const handleChange = useCallback(
     (event) => {
@@ -18,8 +19,8 @@ const Input = (props) => {
 
       setState(newValue)
 
-      if (props.onChange && typeof props.onChange === 'function') {
-        props.onChange(newValue)
+      if (onChange && typeof onChange === 'function') {
+        onChange(newValue)
       }
     },
     [props]
@@ -27,15 +28,17 @@ const Input = (props) => {
 
   return (
     <div className="wrapper-input">
-      <label htmlFor={props.id || randomId}>{props.label}</label>
+      <label htmlFor={id || randomId}>{label}</label>
       <input
-        id={props.id || randomId}
-        name={props.name}
+        className={error ? 'error' : ''}
+        id={id || randomId}
+        name={name}
         value={state}
         onChange={handleChange}
-        type={props.type || 'text'}
-        autoComplete={props.autocomplete}
+        type={type || 'text'}
+        autoComplete={autocomplete}
       />
+      {error ? <span className="error">{error}</span> : null}
     </div>
   )
 }

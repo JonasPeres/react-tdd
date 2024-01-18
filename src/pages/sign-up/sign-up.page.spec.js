@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 import { ToastContainer } from 'react-toastify'
+import '../../locale/i18n'
 import SignUp from './sign-up.page'
 
 describe('Sign Up Page', () => {
@@ -146,10 +147,13 @@ describe('Sign Up Page', () => {
           )
         })
       )
-      setupServer()
       userEvent.click(button)
-      const validationError = await screen.findByText(showErrorMessage('Username cannot be null'))
-      expect(validationError).toBeInTheDocument()
+      expect(await screen.findByText(showErrorMessage('Username cannot be null'))).toBeInTheDocument()
+    })
+    it('Show error message after api response with error', async () => {
+      userEvent.type(passwordInput, 'password')
+      userEvent.type(passwordConfirmInput, 'anotherPassword')
+      expect(screen.queryByText('Passwords do not match')).toBeInTheDocument()
     })
   })
 })
